@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "nodeelement.h": "c",
+        "node.h": "c",
+        "type_traits": "cpp",
+        "cmath": "cpp",
+        "limits": "cpp",
+        "stringhelper.h": "c"
+    }
+}
