@@ -3,7 +3,7 @@
 //Less | Equal | Higher
 typedef enum NodeComparision { Less = 1, Equal, Higher } NodeComparision;
 
-
+//dsahudshuaudhsa
 typedef struct NodeElement{
     char *name;
     int length;
