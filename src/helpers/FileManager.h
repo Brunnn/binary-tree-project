@@ -29,7 +29,6 @@ FileManager* readFileFromPath(char *path){
         while ((read = getline(&line, &len, fp)) != -1) {
             line = strTrim(line);
             size_t readStringLength = strlen(line);
-            printf("line len: %i\n", readStringLength);
             if (readStringLength >= 1){
                 fm->length++;
                 fm->lines = (char**) realloc( fm->lines, fm->length * sizeof(char*));

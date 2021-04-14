@@ -2,7 +2,7 @@
 
 
 typedef struct Node {
-    struct NodeElement element;
+    struct NodeElement *element;
     struct Node *left, *right, *father;
 } Node;
 
@@ -16,15 +16,16 @@ typedef struct Tree{       // referencia a raiz e ao tamanho
 
 
 // operação de busca - encontrar o pai do elemento onde quero incluir/procurar
-Node* searchParent(Tree *tree, NodeElement element, int forInsert, int *Found){
+Node* searchParent(Tree *tree, NodeElement *element, int forInsert, int *Found){
     Node *p = tree->root;
     Node *parent = NULL;
 
 
-    while (p != NULL && (forInsert || strcmp(getName(p->element), getName(element)) != 0)) // rep até achar o elemento
+    while (p != NULL && (forInsert || compareNodes(p->element, element) != Equal)) // rep até achar o elemento
     {
+        NodeComparision cmp = compareNodes(element, p->element);
         parent = p; // guardo o pai antes de descer
-        if(strcmp(getName(element), getName(p->element)) < 0)
+        if(cmp == Less)
             p = p->left;
         else
             p = p->right;
@@ -36,7 +37,7 @@ Node* searchParent(Tree *tree, NodeElement element, int forInsert, int *Found){
     return parent;
 }
 // operação de busca de um elemento na árvore.
-Node* search(Tree *tree, NodeElement element){
+Node* search(Tree *tree, NodeElement *element){
     int found;
     Node *parent = searchParent(tree, element, 0, &found);
     Node *p = NULL;
@@ -44,15 +45,18 @@ Node* search(Tree *tree, NodeElement element){
     if(found){
         if(parent == NULL)
             p = tree->root;
-        else if(strcmp(getName(element), getName(parent->left->element)) == 0)
-            p = parent->left;
-        else
-            p = parent->right;
+        else {
+            NodeComparision cmp = compareNodes(element, parent->left->element);
+            if (cmp == Equal)
+                p = parent->left;
+            else
+                p = parent->right;
+        }
     }
     return p;
 }
 // --- função inserir nó na arvore ----
-Node* insert(Tree *tree, NodeElement element)
+Node* insert(Tree *tree, NodeElement *element)
 {
     Node *newNode = (Node*)malloc(sizeof(Node));
     newNode->element = element;
@@ -64,7 +68,8 @@ Node* insert(Tree *tree, NodeElement element)
     else{
         int found;
         Node *parent = searchParent(tree, element, 1, &found);
-        if(strcmp(getName(element), getName(parent->element)) == 0)
+        NodeComparision cmp = compareNodes(element, parent->element);
+        if(cmp == Equal)
             parent->left = newNode;  // adiciona na esquerda
         else
             parent->right = newNode;  // adiciona na direita

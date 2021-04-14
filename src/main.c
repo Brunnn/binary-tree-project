@@ -7,10 +7,9 @@
 // typedef struct Node Node;
 // typedef struct Tree Tree;
 
-
+#include "./helpers/StringHelper.h"
 #include "./NodeElement.h"
 #include "./Tree.h"
-#include "./helpers/StringHelper.h"
 #include "./helpers/FileManager.h"
 
 
@@ -45,12 +44,12 @@ void main()
                 printf("\n-- Digite um numero: ");
                 scanf("%d",&input);
                 NodeElement* node = readNewNode();
-                insert(tree, *node);
+                insert(tree, node);
                 break;
             case 2:
                 printf("\n-- Digite o Elemento: ");
                 scanf("%d", &input);
-                exist = search(tree, input);
+                exist = search(tree, &input);
                 if(exist != NULL)
                     printf("\n-- Elemento Exite.");
                 else
@@ -89,6 +88,28 @@ void main()
                 FileManager* fm = readFileFromPath(filePath);
                 printFileManagerLines(fm);
                 break;
+
+            case 12:
+                printf("Digite as duas strins para comparacao\n");
+                char *s1, *s2;
+                s1 = scanString(s1);
+                s2 = scanString(s2);
+                NodeElement *n1 = (NodeElement*) malloc(sizeof(NodeElement));
+                NodeElement *n2 = (NodeElement*) malloc(sizeof(NodeElement));
+
+                n1->name = s1;
+
+                n2->name = s2;
+
+                NodeComparision a = compareNodes(n1, n2);
+                printf("Comparacao: %i\n", a);
+
+                free(s1);
+                free(s2);
+                free(n1);
+                free(n2);
+                break;
+
             default :
                 printf("\n-- Opcao invalida....");
         }

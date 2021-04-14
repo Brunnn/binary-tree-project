@@ -19,6 +19,8 @@ char *strTrim(char *str){
     return str;
 }
 
+
+//Le uma string do Input (teclado)
 char* scanString(char *string){
     int c;
     string = malloc(sizeof(char)); 
@@ -34,4 +36,24 @@ char* scanString(char *string){
     }
 
     return string;
+}
+
+
+
+//Cria uma copia de uma string, com seus espaços removidos (necessário dar free no retorno após uso)
+char* removeWhiteSpaces(char *string){
+    char *stringWithoutSpaces = (char*)malloc(sizeof(char)); 
+    int len = 0;
+    char *c;
+
+    stringWithoutSpaces[len] = '\0';
+    for (c = string; *c != '\0'; c++){
+        if (!isspace(*c)){
+            len++;
+            stringWithoutSpaces = realloc(stringWithoutSpaces, (sizeof(char) * len) + 1);
+            stringWithoutSpaces[len-1] = *c;
+            stringWithoutSpaces[len] = '\0';
+        }
+    }
+    return stringWithoutSpaces;
 }
