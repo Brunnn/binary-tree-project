@@ -5,6 +5,7 @@
         "type_traits": "cpp",
         "cmath": "cpp",
         "limits": "cpp",
-        "stringhelper.h": "c"
+        "stringhelper.h": "c",
+        "tree.h": "c"
     }
 }

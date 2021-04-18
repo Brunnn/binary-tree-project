@@ -57,3 +57,4 @@ char* removeWhiteSpaces(char *string){
     }
     return stringWithoutSpaces;
 }
+

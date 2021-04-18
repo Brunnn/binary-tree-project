@@ -12,7 +12,9 @@
 #include "./Tree.h"
 #include "./helpers/FileManager.h"
 
-
+void cls(){
+    //system('cls');
+}
 
 void main()
 {
@@ -20,7 +22,7 @@ void main()
     int action;
     NodeElement input;
     Node *exist;
-
+    FileManager* fm = NULL;
     tree = initialize();
 
     do{
@@ -34,15 +36,16 @@ void main()
         printf("\n----: 7 - Pos-Ordem");
         printf("\n----: 8 - Inserir a partir de um arquivo");
         printf("\n----: 0 - SAIR");
-        printf("\n----: 10 - Ler String");
-        printf("\n----: 11 - Ler Arquivo de Texo");
+        printf("\n----: 10 - Ler Arquivo de Texo");
+        printf("\n----: 11 - Inserir Valores do arquivo lido");
+        printf("\n----: 12 - Printar Arvore");
         printf("\n----> Digite uma opcao: ");
         scanf("%d",&action);
 
         switch(action){
             case 1:
-                printf("\n-- Digite um numero: ");
-                scanf("%d",&input);
+                cls();
+                printf("\nDigite um nome proprio: ");
                 NodeElement* node = readNewNode();
                 insert(tree, node);
                 break;
@@ -73,43 +76,27 @@ void main()
             case 0: break;
 
 
-            case 10: 
-                printf("Digite uma string qualquer\n");
-                char *newString;
-                newString = scanString(newString);
-                printf("typed string: %s\n", newString);
-                break;
-
-            case 11:
+            case 10:
                 printf("Digite o PATH absoluto para o arquivo txt:\n");
                 char *filePath;
                 filePath = scanString(filePath);
-                printf("typed string: %s\n", filePath);
-                FileManager* fm = readFileFromPath(filePath);
+                fm = readFileFromPath(filePath);
                 printFileManagerLines(fm);
                 break;
-
-            case 12:
-                printf("Digite as duas strins para comparacao\n");
-                char *s1, *s2;
-                s1 = scanString(s1);
-                s2 = scanString(s2);
-                NodeElement *n1 = (NodeElement*) malloc(sizeof(NodeElement));
-                NodeElement *n2 = (NodeElement*) malloc(sizeof(NodeElement));
-
-                n1->name = s1;
-
-                n2->name = s2;
-
-                NodeComparision a = compareNodes(n1, n2);
-                printf("Comparacao: %i\n", a);
-
-                free(s1);
-                free(s2);
-                free(n1);
-                free(n2);
+            case 11:
+                if (fm == NULL || fileSuccess(fm) != 1){
+                    printf("Nao existe nenhum arquivo carregado para insercao\n");
+                }
+                else{
+                    int i;
+                    char **words = fileRecords(fm);
+                    for (i = 0; i < fileRecordLen(fm); i++)
+                        insert(tree, NewNode(words[i]));
+                }
                 break;
-
+            case 12:
+                printTree(tree->root, 0);
+                break;
             default :
                 printf("\n-- Opcao invalida....");
         }

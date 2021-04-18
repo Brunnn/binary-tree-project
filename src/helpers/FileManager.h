@@ -1,3 +1,4 @@
+#define MAX_LINE_LENGTH 200
 typedef struct FileManager{
     int success;
     int length;
@@ -12,29 +13,42 @@ void initFileManager(FileManager *fm){
 }
 
 FileManager* readFileFromPath(char *path){
-    size_t len = 0;
-    ssize_t read;
-    char * line = NULL;
+    char* buffer = NULL;
     FileManager* fm = malloc(sizeof(FileManager));
     FILE* fp = fopen(path, "r");
-
     initFileManager(fm);
 
     if (fp == NULL)
-        printf("Ocorreu um erro ao abrir o arquivo/caminho");
+        printf("Ocorreu um erro ao abrir ao abrir %s\n", path);
     else{
         fm->success = 1;
-        fm->lines = (char**) malloc(sizeof(char*));
 
-        while ((read = getline(&line, &len, fp)) != -1) {
-            line = strTrim(line);
-            size_t readStringLength = strlen(line);
-            if (readStringLength >= 1){
+        size_t bufferFinalLength;
+        char *buffer = (char*) malloc(sizeof(char) * MAX_LINE_LENGTH);
+        while (fgets(buffer, MAX_LINE_LENGTH - 1, fp))
+        {
+            buffer[strcspn(buffer, "\n")] = 0;
+            buffer = strTrim(buffer);
+            bufferFinalLength = strlen(buffer);
+            if (bufferFinalLength >= 1){
+                void *tmp = realloc(fm->lines, (fm->length+1) * sizeof(*(fm->lines)));
+                if (tmp == NULL)
+                {
+                    perror("Error ao expandir array de pointers");
+                    for (int i=0; i<fm->length; ++i)
+                        free(fm->lines[i]);
+                    free(fm->lines);
+                    fm->lines = NULL;
+                    fm->success = 0;
+                    fm->length = 0;
+                    break;
+                }
+                fm->lines = tmp;
+                fm->lines[fm->length] = (char*) malloc((sizeof(char) * bufferFinalLength) + 1);
+                strcpy(fm->lines[fm->length], buffer);
                 fm->length++;
-                fm->lines = (char**) realloc( fm->lines, fm->length * sizeof(char*));
-                fm->lines[fm->length-1] = (char*) malloc((sizeof(char) * (int)readStringLength) + 1);
-                strcpy(fm->lines[fm->length-1], line);
             }
+
         }
     }
 
@@ -53,4 +67,33 @@ void printFileManagerLines(FileManager *fm){
     else{
         printf("Essa instancia de FileManager nao obteve sucesso ao ler o arquivo");
     }
+}
+
+
+int fileSuccess(FileManager *fm)
+{
+    return fm->success;
+}
+
+//Retorna a quantidade de palavras lidas
+size_t fileRecordLen(FileManager *fm)
+{
+    return fm->length;
+}
+
+//Retorna uma cópia das palavras lidas no arquivo de texto
+char **fileRecords(FileManager *fm){
+    int i;
+    size_t recordCount = fileRecordLen(fm);
+    char **copiedWords = NULL;
+    size_t wordLen;
+    if (recordCount >= 1) {
+        copiedWords = (char**) malloc(sizeof(char*) * recordCount); 
+        for (i = 0; i < recordCount; i++){
+            wordLen = strlen(fm->lines[i]);
+            copiedWords[i] = (char*) malloc((sizeof(char) * wordLen) + 1);
+            strcpy(copiedWords[i], fm->lines[i]);
+        }
+    }
+    return copiedWords;
 }

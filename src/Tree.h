@@ -2,6 +2,8 @@
 
 
 typedef struct Node {
+    int factor;
+    int _id;
     struct NodeElement *element;
     struct Node *left, *right, *father;
 } Node;
@@ -11,6 +13,7 @@ typedef struct Node {
 typedef struct Tree{       // referencia a raiz e ao tamanho
     Node *root;
     int size;
+    int lastNodeId;
 } Tree;
 
 
@@ -36,6 +39,7 @@ Node* searchParent(Tree *tree, NodeElement *element, int forInsert, int *Found){
         *Found = 1;
     return parent;
 }
+
 // operação de busca de um elemento na árvore.
 Node* search(Tree *tree, NodeElement *element){
     int found;
@@ -47,7 +51,7 @@ Node* search(Tree *tree, NodeElement *element){
             p = tree->root;
         else {
             NodeComparision cmp = compareNodes(element, parent->left->element);
-            if (cmp == Equal)
+            if (cmp == Less || cmp == Equal)
                 p = parent->left;
             else
                 p = parent->right;
@@ -55,6 +59,11 @@ Node* search(Tree *tree, NodeElement *element){
     }
     return p;
 }
+
+int generateNodeId(Tree *tree){
+    return ++tree->lastNodeId;
+}
+
 // --- função inserir nó na arvore ----
 Node* insert(Tree *tree, NodeElement *element)
 {
@@ -62,6 +71,7 @@ Node* insert(Tree *tree, NodeElement *element)
     newNode->element = element;
     newNode->left = NULL;
     newNode->right = NULL;
+    newNode->_id = generateNodeId(tree);
 
     if(tree->root == NULL)
         tree->root = newNode;
@@ -69,7 +79,7 @@ Node* insert(Tree *tree, NodeElement *element)
         int found;
         Node *parent = searchParent(tree, element, 1, &found);
         NodeComparision cmp = compareNodes(element, parent->element);
-        if(cmp == Equal)
+        if(cmp == Less || cmp == Equal)
             parent->left = newNode;  // adiciona na esquerda
         else
             parent->right = newNode;  // adiciona na direita
@@ -86,6 +96,7 @@ Tree* initialize(){
     Tree *newTree = (Tree*)malloc(sizeof(Tree));
     newTree->root = NULL;
     newTree->size = 0;
+    newTree->lastNodeId = 0;
     return newTree;
 }
 
@@ -148,4 +159,33 @@ void posOrder(Tree *tree)
 int size(Tree *tree)
 {
     return tree->size;
+}
+
+int getNodeId(Node *n)
+{
+    return n->_id;
+}
+
+
+
+void _addPadding(char s, int times, int pad){
+    int i,k;
+    for ( i = 0; i < pad; i++ ){
+        for (k=0; k < times; k++)
+            putchar(s);
+    }
+}
+void printTree(Node *root, int level){
+    int i;
+
+    if (root == NULL) {
+        _addPadding( '\t', 3,level );
+        puts("~");
+    }
+    else {
+        printTree( root->right, level + 1 );
+        _addPadding('\t', 3,level );
+        printf ("(%i)(%s)\n", getNodeId(root), getNamePrintable((root->element)));
+        printTree ( root->left, level + 1 );
+    }
 }
