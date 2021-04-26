@@ -95,7 +95,10 @@ void main()
                 }
                 break;
             case 12:
+                printf("DIREITA\n");
                 printTree(tree->root, 0);
+                printf("ESQUERDA\n");
+            
                 break;
             default :
                 printf("\n-- Opcao invalida....");
