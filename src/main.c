@@ -34,9 +34,8 @@ void main()
         printf("\n----: 5 - Em Ordem");
         printf("\n----: 6 - Pre-Ordem");
         printf("\n----: 7 - Pos-Ordem");
-        printf("\n----: 8 - Inserir a partir de um arquivo");
         printf("\n----: 0 - SAIR");
-        printf("\n----: 10 - Ler Arquivo de Texo");
+        printf("\n----: 10 - Ler Arquivo de Texto");
         printf("\n----: 11 - Inserir Valores do arquivo lido");
         printf("\n----: 12 - Printar Arvore");
         printf("\n----> Digite uma opcao: ");
