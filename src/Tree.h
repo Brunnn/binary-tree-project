@@ -260,12 +260,12 @@ void RotateNode(Tree *tree, Node *node)
             newRootNode = RightRightRotate(node);
             break;
         case RightLeft:
-            RightRightRotate(node->right);
-            newRootNode = RightRightRotate(node);
+            //RightRightRotate(node->right);
+            //newRootNode = RightRightRotate(node);
             break;
         case LeftRight:
-            LeftLeftRotate(node->left);
-            newRootNode = LeftLeftRotate(node);
+            //LeftLeftRotate(node->left);
+            //newRootNode = LeftLeftRotate(node);
             break;
     }
 
@@ -343,7 +343,7 @@ void inOrder(Tree *tree)
 //---------------------------------------------
 void preOrderR(Node *sroot) // recursivo
 {
-    printf("%d, ",sroot->element);
+    printf("%s, ",getName(sroot->element));
 
     if(sroot->left != NULL)
         preOrderR(sroot->left);
@@ -367,7 +367,7 @@ void posOrderR(Node *sroot) // recursivo
     if(sroot->right != NULL)
         posOrderR(sroot->right);
 
-    printf("%d, ",sroot->element);
+    printf("%s, ",getName(sroot->element));
 }
 
 void posOrder(Tree *tree)

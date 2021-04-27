@@ -19,7 +19,6 @@ char *strTrim(char *str){
     return str;
 }
 
-
 //Le uma string do Input (teclado)
 char* scanString(char *string){
     int c;
