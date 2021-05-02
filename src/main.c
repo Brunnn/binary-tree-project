@@ -11,6 +11,7 @@
 #include "./NodeElement.h"
 #include "./Tree.h"
 #include "./helpers/FileManager.h"
+#include "./PrintableTree.h"
 
 void cls(){
     //system('cls');
@@ -21,6 +22,7 @@ void main()
     Tree *tree;
     int action;
     NodeElement input;
+    NodeElement* value;
     Node *exist;
     FileManager* fm = NULL;
     tree = initialize();
@@ -49,16 +51,26 @@ void main()
                 insert(tree, node);
                 break;
             case 2:
-                printf("\n-- Digite o Elemento: ");
-                scanf("%d", &input);
-                exist = search(tree, &input);
-                if(exist != NULL)
-                    printf("\n-- Elemento Exite.");
+                printf("\n-- Digite o nome a ser procurado: ");
+                value = readNewNode();
+                int exists = contains(tree->root, value);
+
+                if (exists)
+                    printf("No existe\n");
                 else
-                    printf("\n-- Elemento nao existe.");
+                    printf("No nao existe.\n");
+                free (value);
                 break;
             case 3:
-                //----
+                printf("\n-- Digite um nome a ser excluido\n");
+                value = readNewNode();
+                int removed = removeNode(tree, value);
+
+                if (removed)
+                    printf("No removido com sucesso.\n");
+                else
+                    printf("Valor nao encontrado na arvore.\n");
+                free (value);
                 break;
             case 4:
                 printf("\n-- Tamanho da arvore eh: %d", size(tree));
