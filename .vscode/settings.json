@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "nodeelement.h": "c",
+        "node.h": "c",
+        "type_traits": "cpp",
+        "cmath": "cpp",
+        "limits": "cpp",
+        "stringhelper.h": "c",
+        "tree.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
+}
